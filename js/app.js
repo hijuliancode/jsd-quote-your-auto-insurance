@@ -10,6 +10,7 @@ function Seguro(marca, anio, tipo) {
   this.anio = anio;
   this.tipo = tipo;
 }
+
 Seguro.prototype.cotizarSeguro = function() {
   const { marca, anio, tipo } = this;
   /**
@@ -47,7 +48,9 @@ Seguro.prototype.cotizarSeguro = function() {
     console.log(cantidad)
     return cantidad;
 }
+
 function Interfaz() {}
+
 // Mensaje que se imprime en el html
 Interfaz.prototype.mostrarMensaje = (mensaje, tipo) => {
   const div = document.createElement('div');
@@ -63,6 +66,33 @@ Interfaz.prototype.mostrarMensaje = (mensaje, tipo) => {
   }, 3000);
 }
 
+// Imprime el resultado de la cotización
+Interfaz.prototype.mostrarResultado = function(seguro, total) {
+  const resultadoElm = document.getElementById('resultado')
+  const { anio, tipo } = seguro
+  let marca;
+  switch(seguro.marca) {
+    case '1':
+      marca = 'Americano'
+      break
+    case '2':
+      marca = 'Asiatico'
+      break
+    case '3':
+      marca = 'Europeo'
+      break
+  }
+  const div = document.createElement('div')
+  div.innerHTML = `
+    <h4>Tu resumen</h4>:
+    <p><strong>Marca</strong>: ${marca}</p>
+    <p><strong>Año</strong>: ${anio}</p>
+    <p><strong>Tipo</strong>: ${tipo}</p>
+    <p><strong>Total</strong>: ${total}</p>
+  `;
+  resultadoElm.appendChild(div)
+}
+
 // Listeners
 eventListeners()
 function eventListeners() {
@@ -75,6 +105,7 @@ function iniciarApp() {
   console.log('iniciarApp')
   cargarAnios()
 }
+
 function cargarAnios() {
   for (let i = max; i >= min; i--) {
     let option = document.createElement('option');
@@ -84,6 +115,7 @@ function cargarAnios() {
     selectAnios.appendChild(option)
   }
 }
+
 function enviarFormulario(e) {
   e.preventDefault();
 
@@ -105,5 +137,7 @@ function enviarFormulario(e) {
     const seguro = new Seguro(marcaSeleccionada, anioSeleccionado, tipo)
     // cotizar seguro
     const cantidad = seguro.cotizarSeguro()
+    // Mostrar el resultado
+    interfaz.mostrarResultado(seguro, cantidad)
   }
 }
