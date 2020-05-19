@@ -11,6 +11,20 @@ function Seguro(marca, anio, tipo) {
   this.tipo = tipo;
 }
 function Interfaz() {}
+// Mensaje que se imprime en el html
+Interfaz.prototype.mostrarMensaje = (mensaje, tipo) => {
+  const div = document.createElement('div');
+
+  (tipo === 'error')
+    ? div.classList.add('mensaje', 'error')
+    : div.classList.add('mensaje', 'correcto')
+
+  div.innerHTML = `${mensaje}`
+  formulario.insertBefore(div, document.querySelector('.form-group'))
+  setTimeout(() => {
+    document.querySelector('.mensaje').remove()
+  }, 3000);
+}
 
 // Listeners
 eventListeners()
@@ -48,6 +62,7 @@ function enviarFormulario(e) {
   const interfaz = new Interfaz();
   if(marcaSeleccionada == '' || anioSeleccionado == '' || tipo == '') {
     // Interfaz Imprimiendo Error
+    interfaz.mostrarMensaje('Faltan datos, revisa el formulario y prueba de nuevo', 'error')
     console.log('Faltan Datos')
   } else {
     // Instanciar seguro y mostrar interfaz
