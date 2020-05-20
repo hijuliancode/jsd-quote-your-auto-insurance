@@ -84,13 +84,20 @@ Interfaz.prototype.mostrarResultado = function(seguro, total) {
   }
   const div = document.createElement('div')
   div.innerHTML = `
-    <h4>Tu resumen</h4>:
-    <p><strong>Marca</strong>: ${marca}</p>
-    <p><strong>Año</strong>: ${anio}</p>
-    <p><strong>Tipo</strong>: ${tipo}</p>
-    <p><strong>Total</strong>: ${total}</p>
+    <p class='header'>Tu resumen: </p>
+    <p><strong>Marca: </strong> ${marca}</p>
+    <p><strong>Año: </strong> ${anio}</p>
+    <p><strong>Tipo: </strong> ${tipo}</p>
+    <p><strong>Total: </strong> ${total}</p>
   `;
-  resultadoElm.appendChild(div)
+
+  const spinner = document.querySelector('#cargando img')
+  spinner.style.display = 'block'
+  setTimeout(() => {
+    spinner.style.display = 'none'
+    resultadoElm.appendChild(div)
+  }, 2500);
+
 }
 
 // Listeners
@@ -133,11 +140,17 @@ function enviarFormulario(e) {
     // Interfaz Imprimiendo Error
     interfaz.mostrarMensaje('Faltan datos, revisa el formulario y prueba de nuevo', 'error')
   } else {
+    // Limpiar resultados anteriores
+    const resultados = document.querySelector('#resultado div')
+    if (resultados !== null) {
+      resultados.remove()
+    }
     // Instanciar seguro y mostrar interfaz
     const seguro = new Seguro(marcaSeleccionada, anioSeleccionado, tipo)
     // cotizar seguro
     const cantidad = seguro.cotizarSeguro()
     // Mostrar el resultado
     interfaz.mostrarResultado(seguro, cantidad)
+    interfaz.mostrarMensaje('Cotizando', 'correcto')
   }
 }
